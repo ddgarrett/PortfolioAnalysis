@@ -18,9 +18,9 @@ go mod init github.com/ddgarrett/PortfolioAnalysis
 
 5. create a command directory and main
 
-mkdir -p cmd/PortfolioAnalysis
-touch cmd/PortfolioAnalysis/main.go
+mkdir -p cmd/portfolio-analysis
+touch cmd/portfolio-analysis/main.go
 
-6. Also added server code from above URL and ran command: 
+6. Also added server code from above URL to main.go and ran command: 
 
-go run cmd/PortfolioAnalysis/main.go
+go run cmd/portfolio-analysis/main.go
