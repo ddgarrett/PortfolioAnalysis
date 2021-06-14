@@ -23,7 +23,7 @@ func (sc *StockScenario) AddStock(stock *Stock, pct float64) error {
 		return errors.New("pct greater than 1")
 	}
 
-	if pct < 0 {
+	if pct <= 0 {
 		return errors.New("pct less than 0")
 	}
 
@@ -60,6 +60,8 @@ func (sc *StockScenario) Run(initialAmount float64) error {
 // start and end dates in case they are outside the range
 // of stock history? This might happen if the date range is
 // set after the stocks are added to the Stock Scenario.
+//
+// TODO: verify that percents add up to approx.  1
 func (sc *StockScenario) initResults() error {
 
 	timeFormat := "2006-01-02"
