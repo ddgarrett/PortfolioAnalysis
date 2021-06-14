@@ -92,3 +92,19 @@ func (s *Stock) readHistory() error {
 	}
 	return nil
 }
+
+// getHistIdx gets the index of the stock history entry
+// where the date is <= a given date.
+func (s *Stock) getHistIdx(date string, startIdx int) int {
+
+	result := startIdx
+
+	for i := startIdx + 1; i < len(s.History); i++ {
+		if s.History[i].Date <= date {
+			result = i
+		} else {
+			break
+		}
+	}
+	return result
+}

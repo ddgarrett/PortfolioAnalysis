@@ -46,10 +46,11 @@ func (sc *StockScenario) AddStock(stock *Stock, pct float64) error {
 // an initial amount of dollars.
 func (sc *StockScenario) Run(initialAmount float64) error {
 
-	err := sc.initResults()
-	if err != nil {
+	if err := sc.initResults(); err != nil {
 		return err
 	}
+
+	sc.genFirstResult(initialAmount)
 
 	return nil
 }
@@ -85,4 +86,12 @@ func (sc *StockScenario) initResults() error {
 	sc.Results = make([]ScenarioResults, 0, int(duration))
 
 	return nil
+}
+
+func (sc *StockScenario) genFirstResult(amt float64) {
+
+	results := &ScenarioResults{Date: sc.StartDate, Value: amt}
+	results.initHistIdx(sc)
+	results.rebalanceStocks(sc)
+
 }
