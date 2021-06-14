@@ -6,6 +6,10 @@
 
 package portfolio
 
+// StockScenario defines a scenario for a set of securities and timeframe.
+// Each stock is assigned a given percent of the portfolio. The stock is
+// rebalanced at specific times. Currently rebalance is the 15th of the month
+// but this may change in the future.
 type StockScenario struct {
 	StartDate  string
 	EndDate    string
@@ -14,6 +18,7 @@ type StockScenario struct {
 	Results    []ScenarioResults
 }
 
+// Daily results of the portfolio value.
 type ScenarioResults struct {
 	Date         string
 	Shares       []float64
@@ -22,11 +27,13 @@ type ScenarioResults struct {
 	ChangeValue  float64
 }
 
+// Stock information, ticker and history.
 type Stock struct {
 	Ticker  string
 	History []StockHistory
 }
 
+// Stock history
 type StockHistory struct {
 	Date     string
 	Close    float64
