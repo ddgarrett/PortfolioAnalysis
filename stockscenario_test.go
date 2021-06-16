@@ -37,7 +37,7 @@ func TestAddStock(t *testing.T) {
 
 }
 
-func TestRun(t *testing.T) {
+func TestRun_Part1(t *testing.T) {
 
 	agg, err := NewStock("AGG")
 	if err != nil {
@@ -82,7 +82,7 @@ func TestRun(t *testing.T) {
 		t.Errorf("unexpected .Run error: %v", err)
 	}
 
-	if len(sc.Results) != 255 {
+	if len(sc.Results) != 254 {
 		t.Errorf("invalid .Results len: %d", len(sc.Results))
 	}
 
