@@ -51,15 +51,18 @@ func (sc *StockScenario) Run(initialAmount float64) error {
 	}
 
 	sc.genFirstResult(initialAmount)
-	// fmt.Printf("first days results: %+v \n", sc.Results[0])
+	sc.printScenarioResults()
 
 	date := sc.getNextResultsDate()
 	for ; date <= sc.EndDate; date = sc.getNextResultsDate() {
 		sr := sc.generateDaysResults(date)
 		if sc.needRebalance() {
 			sr.rebalanceStocks(sc)
+			// sc.printScenarioResults()
 		}
 	}
+
+	sc.printScenarioResults()
 	return nil
 }
 
@@ -183,4 +186,25 @@ func (sc *StockScenario) getPrevResults() *ScenarioResults {
 	}
 
 	return &sc.Results[i-2]
+}
+
+func (sc *StockScenario) printScenarioResults() {
+	fmt.Printf("%s to %s, %d stocks, %d results\n", sc.StartDate, sc.EndDate, len(sc.Stocks), len(sc.Results))
+	fmt.Println("Stocks: ")
+	for i, stock := range sc.Stocks {
+		lastHistoryIdx := len(stock.History) - 1
+		firstDate := stock.History[0].Date
+		lastDate := stock.History[lastHistoryIdx].Date
+		fmt.Printf("%s %f%% - %d history, from %s to %s \n",
+			stock.Ticker, sc.PctHolding[i], len(stock.History), firstDate, lastDate)
+	}
+	fmt.Println()
+
+	fmt.Println("**** Results:")
+	for i, result := range sc.Results {
+		fmt.Printf("\t %d: ", i)
+		result.printDailyResult()
+	}
+	fmt.Println()
+	fmt.Println()
 }
