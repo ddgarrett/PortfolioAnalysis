@@ -89,5 +89,20 @@ func TestRun_Part1(t *testing.T) {
 	if cap(sc.Results) != 366 {
 		t.Errorf("invalid .Results capacity: %d", cap(sc.Results))
 	}
+}
 
+func TestRun_Part2(t *testing.T) {
+	fxaix, err := NewStock("FXAIX")
+	if err != nil {
+		t.Errorf("unexpected error: %v", err)
+	}
+
+	sc := NewStockScenario("2020-01-01", "2020-12-31")
+	sc.AddStock(fxaix, 1)
+	if err = sc.Run(10000); err != nil {
+		t.Errorf("unexpected .Run error: %v", err)
+	}
+
+	// fmt.Println(sc.String())
+	// t.Errorf("generate error to show output")
 }

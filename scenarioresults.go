@@ -1,6 +1,7 @@
 package portfolio
 
 import (
+	"bytes"
 	"fmt"
 )
 
@@ -61,6 +62,8 @@ func (sr *ScenarioResults) rebalanceStocks(sc *StockScenario) {
 	}
 }
 
-func (sr *ScenarioResults) printDailyResult() {
-	fmt.Printf("%s\t%v\t%v\t%.2f\t%.2f\n", sr.Date, sr.Shares, sr.StockHistIdx, sr.Value, sr.ChangeValue)
+func (sr *ScenarioResults) String() string {
+	var b bytes.Buffer
+	fmt.Fprintf(&b, "%s\t%v\t%v\t%.2f\t%.2f\n", sr.Date, sr.Shares, sr.StockHistIdx, sr.Value, sr.ChangeValue)
+	return b.String()
 }

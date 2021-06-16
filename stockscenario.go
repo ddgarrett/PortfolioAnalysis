@@ -1,6 +1,7 @@
 package portfolio
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"time"
@@ -51,7 +52,6 @@ func (sc *StockScenario) Run(initialAmount float64) error {
 	}
 
 	sc.genFirstResult(initialAmount)
-	sc.printScenarioResults()
 
 	date := sc.getNextResultsDate()
 	for ; date <= sc.EndDate; date = sc.getNextResultsDate() {
@@ -62,7 +62,6 @@ func (sc *StockScenario) Run(initialAmount float64) error {
 		}
 	}
 
-	sc.printScenarioResults()
 	return nil
 }
 
@@ -188,23 +187,24 @@ func (sc *StockScenario) getPrevResults() *ScenarioResults {
 	return &sc.Results[i-2]
 }
 
-func (sc *StockScenario) printScenarioResults() {
-	fmt.Printf("%s to %s, %d stocks, %d results\n", sc.StartDate, sc.EndDate, len(sc.Stocks), len(sc.Results))
-	fmt.Println("Stocks: ")
+func (sc *StockScenario) String() string {
+	var b bytes.Buffer
+	fmt.Fprintf(&b, "%s to %s, %d stocks, %d results\n", sc.StartDate, sc.EndDate, len(sc.Stocks), len(sc.Results))
+	fmt.Fprintf(&b, "Stocks: \n")
 	for i, stock := range sc.Stocks {
 		lastHistoryIdx := len(stock.History) - 1
 		firstDate := stock.History[0].Date
 		lastDate := stock.History[lastHistoryIdx].Date
-		fmt.Printf("%s %f%% - %d history, from %s to %s \n",
+		fmt.Fprintf(&b, "%s %f%% - %d history, from %s to %s \n",
 			stock.Ticker, sc.PctHolding[i], len(stock.History), firstDate, lastDate)
 	}
-	fmt.Println()
+	fmt.Fprintf(&b, "\n")
 
-	fmt.Println("**** Results:")
+	fmt.Fprintf(&b, "**** Results: \n")
 	for i, result := range sc.Results {
-		fmt.Printf("\t %d: ", i)
-		result.printDailyResult()
+		fmt.Fprintf(&b, "\t %d: %s", i, result.String())
 	}
-	fmt.Println()
-	fmt.Println()
+	fmt.Fprintf(&b, "\n")
+	fmt.Fprintf(&b, "\n")
+	return b.String()
 }
