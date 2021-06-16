@@ -51,7 +51,15 @@ func (sc *StockScenario) Run(initialAmount float64) error {
 	}
 
 	sc.genFirstResult(initialAmount)
+	// fmt.Printf("first days results: %+v \n", sc.Results[0])
 
+	date := sc.getNextResultsDate()
+	for ; date <= sc.EndDate; date = sc.getNextResultsDate() {
+		sr := sc.generateDaysResults(date)
+		if sc.needRebalance() {
+			sr.rebalanceStocks(sc)
+		}
+	}
 	return nil
 }
 
@@ -88,10 +96,91 @@ func (sc *StockScenario) initResults() error {
 	return nil
 }
 
+// genFirstResult generates the first ScenarioResults entry
 func (sc *StockScenario) genFirstResult(amt float64) {
 
 	results := &ScenarioResults{Date: sc.StartDate, Value: amt}
 	results.initHistIdx(sc)
 	results.rebalanceStocks(sc)
+	sc.Results = append(sc.Results, *results)
 
+}
+
+// getNextDate returns the next date for which results can be calculated.
+// If no next date, returns MaxDate.
+func (sc *StockScenario) getNextResultsDate() string {
+	results := MaxDate
+
+	lastResults := sc.getLastResults()
+	if lastResults == nil {
+		panic("lastResults nil")
+	}
+
+	for i, stock := range sc.Stocks {
+		date := stock.getNextDate(lastResults.Date, lastResults.StockHistIdx[i])
+		if date < results {
+			results = date
+		}
+	}
+
+	return results
+}
+
+// generateDaysResults generates the results for a specified day.
+func (sc *StockScenario) generateDaysResults(date string) *ScenarioResults {
+	results := &ScenarioResults{}
+	results.initNextResults(date, sc.getLastResults(), sc.Stocks)
+	sc.Results = append(sc.Results, *results)
+	return results
+}
+
+// needRebalance returns true if the last days results need to be rebalanced.
+// Currently rebalances on the first trading day after the 15th.
+// "yyyy-mm-dd"
+func (sc *StockScenario) needRebalance() bool {
+
+	lr := sc.getLastResults()
+	if lr == nil {
+		// no entries to rebalance yet - shouldn't really get here
+		return false
+	}
+
+	if lr.Date[8:] >= "15" {
+
+		pr := sc.getPrevResults()
+		if pr == nil {
+			// no previous results - don't rebalance
+			return false
+		}
+
+		if pr.Date[8:] >= "15" {
+			// already rebalanced during a prior day in this month
+			return false
+		}
+
+		return true
+	}
+
+	return false
+}
+
+// getLastResults returns the last entry from the Results slice
+func (sc *StockScenario) getLastResults() *ScenarioResults {
+	if len(sc.Results) == 0 {
+		// no results yet - return nil
+		return nil
+	}
+
+	results := sc.Results[len(sc.Results)-1]
+	return &results
+}
+
+// getPrevResults returns the next to last results
+func (sc *StockScenario) getPrevResults() *ScenarioResults {
+	i := len(sc.Results)
+	if i < 2 {
+		return nil
+	}
+
+	return &sc.Results[i-2]
 }

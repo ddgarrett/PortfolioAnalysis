@@ -39,3 +39,5 @@ type StockHistory struct {
 	Close    float64
 	Dividend float64
 }
+
+const MaxDate = "4000-01-01"

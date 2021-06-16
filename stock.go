@@ -108,3 +108,33 @@ func (s *Stock) getHistIdx(date string, startIdx int) int {
 	}
 	return result
 }
+
+// getNextDate returns the next stock history date
+// which is greater than lastDate.
+// Starts searching stock history at beginIdx.
+// If no next history date available, returns the constant MaxDate
+func (s *Stock) getNextDate(lastDate string, beginIdx int) string {
+
+	for i := beginIdx; i < len(s.History); i++ {
+		if s.History[i].Date > lastDate {
+			return s.History[i].Date
+		}
+	}
+	return MaxDate
+}
+
+// getCloseDateIdx returns the index of the stock close date
+// which is on or before the specified date.
+// Starts search in stock history at beginIdx.
+func (s *Stock) getCloseDateIdx(closeDate string, beginIdx int) int {
+
+	result := beginIdx
+	for i := beginIdx + 1; i < len(s.History); i++ {
+		if s.History[i].Date <= closeDate {
+			result = i
+		} else {
+			return result
+		}
+	}
+	return -1
+}
