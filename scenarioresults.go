@@ -1,6 +1,8 @@
 package portfolio
 
-import "log"
+import (
+	"fmt"
+)
 
 // Calculate the StockHistIdx for each stock
 // such that the StockHistory.Date is <= sr.Date.
@@ -22,10 +24,6 @@ func (sr *ScenarioResults) initNextResults(date string, prevSR *ScenarioResults,
 	sr.Shares = make([]float64, len(prevSR.Shares))
 	copy(sr.Shares, prevSR.Shares)
 
-	if len(sr.Shares) != len(prevSR.Shares) {
-		log.Fatal("misunderstood copy")
-	}
-
 	sr.StockHistIdx = make([]int, len(sr.Shares))
 
 	for i, stock := range stocks {
@@ -37,7 +35,14 @@ func (sr *ScenarioResults) initNextResults(date string, prevSR *ScenarioResults,
 		close := stock.History[closeIdx].Close
 		dividend := stock.History[closeIdx].Dividend
 
-		sr.Value += ((close + dividend) * shares)
+		if dividend != 0 {
+			dividendTotal := shares * dividend
+			newShares := dividendTotal / close
+			shares += newShares
+			sr.Shares[i] = shares
+		}
+
+		sr.Value += (close * shares)
 	}
 
 	sr.ChangeValue = sr.Value - prevSR.Value
@@ -54,4 +59,8 @@ func (sr *ScenarioResults) rebalanceStocks(sc *StockScenario) {
 		stkValue := sr.Value * pct
 		sr.Shares[i] = stkValue / close
 	}
+}
+
+func (sr *ScenarioResults) printDailyResult() {
+	fmt.Printf("%s\t%v\t%v\t%.2f\t%.2f\n", sr.Date, sr.Shares, sr.StockHistIdx, sr.Value, sr.ChangeValue)
 }
