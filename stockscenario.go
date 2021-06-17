@@ -43,9 +43,9 @@ func (sc *StockScenario) AddStock(stock *Stock, pct float64) error {
 	return nil
 }
 
-// Run runs the defined stock scenario starting with
-// an initial amount of dollars.
-func (sc *StockScenario) RunScenario(initialAmount float64) error {
+// CalcResults runs the defined stock scenario starting with
+// an initial amount of dollars and generates the results.
+func (sc *StockScenario) CalcResults(initialAmount float64) error {
 
 	sc.StartAmt = initialAmount
 
