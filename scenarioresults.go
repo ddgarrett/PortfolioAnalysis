@@ -5,6 +5,12 @@ import (
 	"fmt"
 )
 
+func (sr *ScenarioResults) String() string {
+	var b bytes.Buffer
+	fmt.Fprintf(&b, "%s\t%v\t%v\t%.2f\t%.2f\n", sr.Date, sr.Shares, sr.StockHistIdx, sr.Value, sr.ChangeValue)
+	return b.String()
+}
+
 // Calculate the StockHistIdx for each stock
 // such that the StockHistory.Date is <= sr.Date.
 // sr.Date must be set before calling this method.
@@ -60,10 +66,4 @@ func (sr *ScenarioResults) rebalanceStocks(sc *StockScenario) {
 		stkValue := sr.Value * pct
 		sr.Shares[i] = stkValue / close
 	}
-}
-
-func (sr *ScenarioResults) String() string {
-	var b bytes.Buffer
-	fmt.Fprintf(&b, "%s\t%v\t%v\t%.2f\t%.2f\n", sr.Date, sr.Shares, sr.StockHistIdx, sr.Value, sr.ChangeValue)
-	return b.String()
 }

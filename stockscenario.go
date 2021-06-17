@@ -65,6 +65,28 @@ func (sc *StockScenario) Run(initialAmount float64) error {
 	return nil
 }
 
+func (sc *StockScenario) String() string {
+	var b bytes.Buffer
+	fmt.Fprintf(&b, "%s to %s, %d stocks, %d results\n", sc.StartDate, sc.EndDate, len(sc.Stocks), len(sc.Results))
+	fmt.Fprintf(&b, "Stocks: \n")
+	for i, stock := range sc.Stocks {
+		lastHistoryIdx := len(stock.History) - 1
+		firstDate := stock.History[0].Date
+		lastDate := stock.History[lastHistoryIdx].Date
+		fmt.Fprintf(&b, "%s %f%% - %d history, from %s to %s \n",
+			stock.Ticker, sc.PctHolding[i], len(stock.History), firstDate, lastDate)
+	}
+	fmt.Fprintf(&b, "\n")
+
+	fmt.Fprintf(&b, "**** Results: \n")
+	for i, result := range sc.Results {
+		fmt.Fprintf(&b, "\t %d: %s", i, result.String())
+	}
+	fmt.Fprintf(&b, "\n")
+	fmt.Fprintf(&b, "\n")
+	return b.String()
+}
+
 // initialize the results for a stock scenario run
 //
 // TODO: go through all of the stock history again to adjust
@@ -185,26 +207,4 @@ func (sc *StockScenario) getPrevResults() *ScenarioResults {
 	}
 
 	return &sc.Results[i-2]
-}
-
-func (sc *StockScenario) String() string {
-	var b bytes.Buffer
-	fmt.Fprintf(&b, "%s to %s, %d stocks, %d results\n", sc.StartDate, sc.EndDate, len(sc.Stocks), len(sc.Results))
-	fmt.Fprintf(&b, "Stocks: \n")
-	for i, stock := range sc.Stocks {
-		lastHistoryIdx := len(stock.History) - 1
-		firstDate := stock.History[0].Date
-		lastDate := stock.History[lastHistoryIdx].Date
-		fmt.Fprintf(&b, "%s %f%% - %d history, from %s to %s \n",
-			stock.Ticker, sc.PctHolding[i], len(stock.History), firstDate, lastDate)
-	}
-	fmt.Fprintf(&b, "\n")
-
-	fmt.Fprintf(&b, "**** Results: \n")
-	for i, result := range sc.Results {
-		fmt.Fprintf(&b, "\t %d: %s", i, result.String())
-	}
-	fmt.Fprintf(&b, "\n")
-	fmt.Fprintf(&b, "\n")
-	return b.String()
 }
