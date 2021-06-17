@@ -2,6 +2,9 @@ package portfolio
 
 import (
 	"testing"
+
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
 )
 
 func TestAddStock(t *testing.T) {
@@ -91,18 +94,21 @@ func TestRun_Part1(t *testing.T) {
 	}
 }
 
-func TestRun_Part2(t *testing.T) {
-	fxaix, err := NewStock("FXAIX")
-	if err != nil {
-		t.Errorf("unexpected error: %v", err)
-	}
+func ExampleRun() {
+	fxaix, _ := NewStock("FXAIX")
 
 	sc := NewStockScenario("2020-01-01", "2020-12-31")
 	sc.AddStock(fxaix, 1)
-	if err = sc.Run(10000); err != nil {
-		t.Errorf("unexpected .Run error: %v", err)
-	}
+	sc.Run(10000)
 
 	// fmt.Println(sc.String())
 	// t.Errorf("generate error to show output")
+	p := message.NewPrinter(language.English)
+	p.Printf("Stock %s, StartDate: %s, EndDate: %s\n", "FXAIX", sc.StartDate, sc.EndDate)
+
+	p.Printf("\tStartAmt: %.2f EndAmt: %.2f PctChange: %.4f%%\n",
+		sc.StartAmt, sc.EndAmt, sc.PctChange*100)
+
+	// output: Stock FXAIX, StartDate: 2020-01-01, EndDate: 2020-12-31
+	//	StartAmt: 10,000.00 EndAmt: 11,839.52 PctChange: 18.3952%
 }

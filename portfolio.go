@@ -13,6 +13,9 @@ package portfolio
 type StockScenario struct {
 	StartDate  string
 	EndDate    string
+	StartAmt   float64
+	EndAmt     float64
+	PctChange  float64
 	Stocks     []*Stock
 	PctHolding []float64
 	Results    []ScenarioResults

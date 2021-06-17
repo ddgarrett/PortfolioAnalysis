@@ -47,6 +47,8 @@ func (sc *StockScenario) AddStock(stock *Stock, pct float64) error {
 // an initial amount of dollars.
 func (sc *StockScenario) Run(initialAmount float64) error {
 
+	sc.StartAmt = initialAmount
+
 	if err := sc.initResults(); err != nil {
 		return err
 	}
@@ -62,6 +64,9 @@ func (sc *StockScenario) Run(initialAmount float64) error {
 		}
 	}
 
+	lastResult := sc.getLastResults()
+	sc.EndAmt = lastResult.Value
+	sc.PctChange = sc.EndAmt/sc.StartAmt - 1
 	return nil
 }
 
