@@ -136,5 +136,10 @@ func (s *Stock) getCloseDateIdx(closeDate string, beginIdx int) int {
 			return result
 		}
 	}
+
+	if result != beginIdx {
+		return result
+	}
+
 	return -1
 }
