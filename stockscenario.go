@@ -45,7 +45,7 @@ func (sc *StockScenario) AddStock(stock *Stock, pct float64) error {
 
 // Run runs the defined stock scenario starting with
 // an initial amount of dollars.
-func (sc *StockScenario) Run(initialAmount float64) error {
+func (sc *StockScenario) RunScenario(initialAmount float64) error {
 
 	sc.StartAmt = initialAmount
 

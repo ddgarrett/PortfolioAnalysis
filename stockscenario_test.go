@@ -54,14 +54,14 @@ func TestRun_Part1(t *testing.T) {
 	}
 
 	/*
-		if err = sc.Run(10000); err != nil {
+		if err = sc.RunScenario(10000); err != nil {
 			t.Errorf("unexpected error: %v", err)
 		}
 	*/
 
 	sc = NewStockScenario("202x-01-01", "2020-12-31")
 	sc.AddStock(agg, 1)
-	if err = sc.Run(10000); err == nil {
+	if err = sc.RunScenario(10000); err == nil {
 		t.Error("didn't catch invalid start date error")
 	}
 
@@ -69,19 +69,19 @@ func TestRun_Part1(t *testing.T) {
 	// the highest date in AGG stock history, or it will be changed to that date.
 	sc = NewStockScenario("2020-01-01", "2020x-12-31")
 	sc.AddStock(agg, 1)
-	if err = sc.Run(10000); err == nil {
+	if err = sc.RunScenario(10000); err == nil {
 		t.Error("didn't catch invalid end date error")
 	}
 
 	sc = NewStockScenario("2021-01-01", "2020-12-31")
 	sc.AddStock(agg, 1)
-	if err = sc.Run(10000); err == nil {
+	if err = sc.RunScenario(10000); err == nil {
 		t.Error("didn't catch start date after end date error")
 	}
 
 	sc = NewStockScenario("2020-01-01", "2020-12-31")
 	sc.AddStock(agg, 1)
-	if err = sc.Run(10000); err != nil {
+	if err = sc.RunScenario(10000); err != nil {
 		t.Errorf("unexpected .Run error: %v", err)
 	}
 
@@ -94,12 +94,12 @@ func TestRun_Part1(t *testing.T) {
 	}
 }
 
-func ExampleRun() {
+func ExampleRunScenario() {
 	fxaix, _ := NewStock("FXAIX")
 
 	sc := NewStockScenario("2020-01-01", "2020-12-31")
 	sc.AddStock(fxaix, 1)
-	sc.Run(10000)
+	sc.RunScenario(10000)
 
 	// fmt.Println(sc.String())
 	// t.Errorf("generate error to show output")
