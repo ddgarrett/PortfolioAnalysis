@@ -80,11 +80,12 @@ func (s *Stock) readHistory() error {
 		} else {
 			for j, history := range s.History {
 				if history.Date >= day[dateIdx] {
-					s.History[j].Dividend, err = strconv.ParseFloat(day[dividendsIdx], 64)
+					dividend, err := strconv.ParseFloat(day[dividendsIdx], 64)
 					if err != nil {
 						return fmt.Errorf("invalid float in stock dividends file for %s, line %d, %v",
 							s.Ticker, i, err)
 					}
+					s.History[j].Dividend += dividend
 					break
 				}
 			}
