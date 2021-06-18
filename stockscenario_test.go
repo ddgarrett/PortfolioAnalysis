@@ -111,23 +111,24 @@ func ExampleCalcResults() {
 	sc.CalcResults(10000)
 	printResults(sc)
 
-	// output: Stock FXAIX, StartDate: 2016-01-01, EndDate: 2016-12-31
-	// 	StartAmt: 10,000.00 EndAmt: 11,140.89 PctChange: 11.4089%
+	// Stock FXAIX, StartDate: 2016-01-01, EndDate: 2016-12-31
+	// 	StartAmt: 10,000.00 EndAmt: 11,196.50 PctChange: 11.9650%
 	//
 	// Stock FXAIX, StartDate: 2017-01-01, EndDate: 2017-12-31
-	// 	StartAmt: 10,000.00 EndAmt: 12,159.01 PctChange: 21.5901%
+	// 	StartAmt: 10,000.00 EndAmt: 12,181.42 PctChange: 21.8142%
 	//
 	// Stock FXAIX, StartDate: 2018-01-01, EndDate: 2018-12-31
-	// 	StartAmt: 10,000.00 EndAmt: 9,500.10 PctChange: -4.9990%
+	// 	StartAmt: 10,000.00 EndAmt: 9,559.78 PctChange: -4.4022%
 	//
 	// Stock FXAIX, StartDate: 2019-01-01, EndDate: 2019-12-31
-	// 	StartAmt: 10,000.00 EndAmt: 13,131.70 PctChange: 31.3170%
+	// 	StartAmt: 10,000.00 EndAmt: 13,147.18 PctChange: 31.4718%
 	//
 	// Stock FXAIX, StartDate: 2020-01-01, EndDate: 2020-12-31
 	// 	StartAmt: 10,000.00 EndAmt: 11,839.52 PctChange: 18.3952%
 	//
 	// Stock FXAIX, StartDate: 2011-05-31, EndDate: 2021-05-31
-	// 	StartAmt: 10,000.00 EndAmt: 37,253.38 PctChange: 272.5338%
+	// 	StartAmt: 10,000.00 EndAmt: 38,114.99 PctChange: 281.1499%
+
 }
 
 func printResults(sc *StockScenario) {

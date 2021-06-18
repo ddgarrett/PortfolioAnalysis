@@ -38,9 +38,10 @@ type Stock struct {
 
 // Stock history
 type StockHistory struct {
-	Date     string
-	Close    float64
-	Dividend float64
+	Date         string
+	Close        float64
+	Dividend     float64
+	Distribution float64
 }
 
 const MaxDate = "4000-01-01"

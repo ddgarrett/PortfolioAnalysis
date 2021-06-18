@@ -41,6 +41,7 @@ func (sr *ScenarioResults) initNextResults(date string, prevSR *ScenarioResults,
 		shares := sr.Shares[i]
 		close := stock.History[closeIdx].Close
 		dividend := stock.History[closeIdx].Dividend
+		dividend += stock.History[closeIdx].Distribution
 
 		if dividend != 0 {
 			dividendTotal := shares * dividend
