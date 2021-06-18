@@ -1,6 +1,7 @@
 package portfolio
 
 import (
+	"fmt"
 	"testing"
 
 	"golang.org/x/text/language"
@@ -53,11 +54,9 @@ func TestRun_Part1(t *testing.T) {
 		t.Errorf("unexpected error: %v", err)
 	}
 
-	/*
-		if err = sc.RunScenario(10000); err != nil {
-			t.Errorf("unexpected error: %v", err)
-		}
-	*/
+	if err = sc.CalcResults(10000); err != nil {
+		t.Errorf("unexpected error: %v", err)
+	}
 
 	sc = NewStockScenario("202x-01-01", "2020-12-31")
 	sc.AddStock(agg, 1)
@@ -94,6 +93,17 @@ func TestRun_Part1(t *testing.T) {
 	}
 }
 
+func ExampleString() {
+	fxaix, _ := NewStock("FXAIX")
+	sc := NewStockScenario("2020-01-01", "2021-01-01")
+	sc.AddStock(fxaix, 1)
+	sc.CalcResults(10000)
+
+	fmt.Println(len(sc.String()))
+
+	// output: 16902
+}
+
 func ExampleCalcResults() {
 	fxaix, _ := NewStock("FXAIX")
 
@@ -111,7 +121,7 @@ func ExampleCalcResults() {
 	sc.CalcResults(10000)
 	printResults(sc)
 
-	// Stock FXAIX, StartDate: 2016-01-01, EndDate: 2016-12-31
+	// output: Stock FXAIX, StartDate: 2016-01-01, EndDate: 2016-12-31
 	// 	StartAmt: 10,000.00 EndAmt: 11,196.50 PctChange: 11.9650%
 	//
 	// Stock FXAIX, StartDate: 2017-01-01, EndDate: 2017-12-31

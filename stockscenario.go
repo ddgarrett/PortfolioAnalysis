@@ -85,7 +85,7 @@ func (sc *StockScenario) String() string {
 
 	fmt.Fprintf(&b, "**** Results: \n")
 	for i, result := range sc.Results {
-		fmt.Fprintf(&b, "\t %d: %s", i, result.String())
+		fmt.Fprintf(&b, "    %d: %s", i, result.String())
 	}
 	fmt.Fprintf(&b, "\n")
 	fmt.Fprintf(&b, "\n")

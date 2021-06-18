@@ -7,7 +7,7 @@ import (
 
 func (sr *ScenarioResults) String() string {
 	var b bytes.Buffer
-	fmt.Fprintf(&b, "%s\t%v\t%v\t%.2f\t%.2f\n", sr.Date, sr.Shares, sr.StockHistIdx, sr.Value, sr.ChangeValue)
+	fmt.Fprintf(&b, "%s  %v  %v  %.2f  %.2f\n", sr.Date, sr.Shares, sr.StockHistIdx, sr.Value, sr.ChangeValue)
 	return b.String()
 }
 
