@@ -3,9 +3,6 @@ package portfolio
 import (
 	"fmt"
 	"testing"
-
-	"golang.org/x/text/language"
-	"golang.org/x/text/message"
 )
 
 func TestAddStock(t *testing.T) {
@@ -41,7 +38,7 @@ func TestAddStock(t *testing.T) {
 
 }
 
-func TestRun_Part1(t *testing.T) {
+func TestCalcResults(t *testing.T) {
 
 	agg, err := NewStock("AGG")
 	if err != nil {
@@ -93,7 +90,7 @@ func TestRun_Part1(t *testing.T) {
 	}
 }
 
-func ExampleString() {
+func TestString(t *testing.T) {
 	fxaix, _ := NewStock("FXAIX")
 	sc := NewStockScenario("2020-01-01", "2021-01-01")
 	sc.AddStock(fxaix, 1)
@@ -102,49 +99,48 @@ func ExampleString() {
 	fmt.Println(len(sc.String()))
 
 	// output: 16902
+	if len(sc.String()) != 16902 {
+		t.Errorf("invalid .Results capacity: %d", cap(sc.Results))
+	}
 }
 
-func ExampleCalcResults() {
-	fxaix, _ := NewStock("FXAIX")
+func TestCalcResults_Part02(t *testing.T) {
 
+	stockTickers := []string{"FXAIX", "FXNAX", "VDADX"}
 	years := []string{"2016", "2017", "2018", "2019", "2020"}
 
-	for _, year := range years {
-		sc := NewStockScenario(year+"-01-01", year+"-12-31")
-		sc.AddStock(fxaix, 1)
-		sc.CalcResults(10000)
-		printResults(sc)
+	expectedResult := [][]string{
+		{"11.97", "21.81", "-4.40", "31.47", "18.40"},
+		{"2.51", "3.49", "0.03", "8.48", "7.80"},
+		{"11.79", "12.22", "-2.03", "29.68", "15.46"},
 	}
 
-	sc := NewStockScenario("2011-05-31", "2021-05-31")
-	sc.AddStock(fxaix, 1)
-	sc.CalcResults(10000)
-	printResults(sc)
+	stocks := []*Stock{}
 
-	// output: Stock FXAIX, StartDate: 2016-01-01, EndDate: 2016-12-31
-	// 	StartAmt: 10,000.00 EndAmt: 11,196.50 PctChange: 11.9650%
-	//
-	// Stock FXAIX, StartDate: 2017-01-01, EndDate: 2017-12-31
-	// 	StartAmt: 10,000.00 EndAmt: 12,181.42 PctChange: 21.8142%
-	//
-	// Stock FXAIX, StartDate: 2018-01-01, EndDate: 2018-12-31
-	// 	StartAmt: 10,000.00 EndAmt: 9,559.78 PctChange: -4.4022%
-	//
-	// Stock FXAIX, StartDate: 2019-01-01, EndDate: 2019-12-31
-	// 	StartAmt: 10,000.00 EndAmt: 13,147.18 PctChange: 31.4718%
-	//
-	// Stock FXAIX, StartDate: 2020-01-01, EndDate: 2020-12-31
-	// 	StartAmt: 10,000.00 EndAmt: 11,839.52 PctChange: 18.3952%
-	//
-	// Stock FXAIX, StartDate: 2011-05-31, EndDate: 2021-05-31
-	// 	StartAmt: 10,000.00 EndAmt: 38,114.99 PctChange: 281.1499%
+	// read stock history files
+	for _, stockTicker := range stockTickers {
+		stock, err := NewStock(stockTicker)
+		if err != nil {
+			t.Errorf("unexpected error reading stock: %v", err)
+		}
+		stocks = append(stocks, stock)
 
-}
+	}
 
-func printResults(sc *StockScenario) {
-	p := message.NewPrinter(language.English)
-	p.Printf("Stock %s, StartDate: %s, EndDate: %s\n", "FXAIX", sc.StartDate, sc.EndDate)
+	for i, year := range years {
+		for j, stock := range stocks {
+			sc := NewStockScenario(year+"-01-01", year+"-12-31")
+			sc.AddStock(stock, 1)
+			sc.CalcResults(10000)
 
-	p.Printf("\tStartAmt: %.2f EndAmt: %.2f PctChange: %.4f%%\n\n",
-		sc.StartAmt, sc.EndAmt, sc.PctChange*100)
+			pctChg := fmt.Sprintf("%.2f", sc.PctChange*100.0)
+			expectPctChg := expectedResult[j][i]
+
+			if pctChg != expectPctChg {
+				t.Errorf("stock %s, year %s expected %s%% change, got %s%% change",
+					stock.Ticker, year, expectPctChg, pctChg)
+			}
+		}
+	}
+
 }
