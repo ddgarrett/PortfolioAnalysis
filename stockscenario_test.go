@@ -137,6 +137,8 @@ func TestCalcResults_Part02(t *testing.T) {
 			expectPctChg := expectedResult[j][i]
 
 			if pctChg != expectPctChg {
+				// show 4 decimal digits on actual pct change
+				pctChg = fmt.Sprintf("%.4f", sc.PctChange*100.0)
 				t.Errorf("stock %s, year %s expected %s%% change, got %s%% change",
 					stock.Ticker, year, expectPctChg, pctChg)
 			}
