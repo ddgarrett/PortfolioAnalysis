@@ -139,7 +139,7 @@ func TestCalcResults_Part02(t *testing.T) {
 			actualPctChg := sc.PctChange * 100
 
 			if math.Abs(actualPctChg-expectPctChg) > .021 {
-				t.Errorf("stock %s, year %s expected %.4f%% change, got %.4f%% change",
+				t.Errorf("stock %s, year %s expected %.2f%% change, got %.4f%% change",
 					stock.Ticker, year, expectPctChg, actualPctChg)
 			}
 		}
