@@ -3,6 +3,7 @@ package portfolio
 import (
 	"bytes"
 	"fmt"
+	"math"
 )
 
 func (sr *ScenarioResults) String() string {
@@ -44,8 +45,19 @@ func (sr *ScenarioResults) initNextResults(date string, prevSR *ScenarioResults,
 		dividend += stock.History[closeIdx].Distribution
 
 		if dividend != 0 {
-			dividendTotal := shares * dividend
+			// round to dividend amount to nearest cent
+			// use roundToEven to eliminate bias for .5 cents
+			dividendTotal := math.RoundToEven(shares * dividend * 100)
+			dividendTotal = dividendTotal / 100
+
+			// calc new shares
 			newShares := dividendTotal / close
+
+			// round new shares to 3 decimal points, again using roundToEven
+			newShares = math.RoundToEven(newShares * 1000)
+			newShares = newShares / 1000
+
+			// add new shares to holdings
 			shares += newShares
 			sr.Shares[i] = shares
 		}
@@ -65,6 +77,12 @@ func (sr *ScenarioResults) rebalanceStocks(sc *StockScenario) {
 		pct := sc.PctHolding[i]
 
 		stkValue := sr.Value * pct
-		sr.Shares[i] = stkValue / close
+		shares := stkValue / close
+
+		// round number of shares to 3 decimal places
+		shares = math.RoundToEven(shares * 1000)
+		shares = shares / 1000
+
+		sr.Shares[i] = shares
 	}
 }
