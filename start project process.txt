@@ -8,6 +8,9 @@ Adopted from the process at https://www.wolfe.id.au/2020/03/10/starting-a-go-pro
 2. Copy the Code for CLI and run it in home directory:
 
 gh repo clone ddgarrett/PortfolioAnalysis
+
+on windows: 
+> git clone https://github.com/ddgarrett/PortfolioAnalysis.git
     
 3. Previous step will create a new directory, PortfolioAnalysis, 
    - cd into that directory and run next command
@@ -24,3 +27,7 @@ touch cmd/portfolio/main.go
 6. Also added server code from above URL to main.go and ran command: 
 
 go run cmd/portfolio/main.go
+
+- access webserver using:
+> http://localhost:8080/hello
+
