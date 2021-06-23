@@ -66,6 +66,7 @@ func (sr *ScenarioResults) initNextResults(date string, prevSR *ScenarioResults,
 	}
 
 	sr.ChangeValue = sr.Value - prevSR.Value
+	sr.PctChange = sr.ChangeValue / prevSR.Value
 }
 
 // Buy/Sell stocks to rebalance the stock portfolio to the scenario defined percents.

@@ -11,10 +11,17 @@ package portfolio
 // rebalanced at specific times. Currently rebalance is the 15th of the month
 // but this may change in the future.
 type StockScenario struct {
-	StartDate  string
-	EndDate    string
-	StartAmt   float64
-	EndAmt     float64
+	StartDate string
+	EndDate   string
+
+	StartAmt float64
+	EndAmt   float64
+
+	GeomeanPctChg float64
+	Variance      float64
+	StdDev        float64
+	SharpeRatio   float64
+
 	PctChange  float64
 	Stocks     []*Stock
 	PctHolding []float64
@@ -28,6 +35,7 @@ type ScenarioResults struct {
 	StockHistIdx []int
 	Value        float64
 	ChangeValue  float64
+	PctChange    float64
 }
 
 // Stock information, ticker and history.

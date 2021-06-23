@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"math"
 	"time"
 )
 
@@ -67,7 +68,36 @@ func (sc *StockScenario) CalcResults(initialAmount float64) error {
 	lastResult := sc.getLastResults()
 	sc.EndAmt = lastResult.Value
 	sc.PctChange = sc.EndAmt/sc.StartAmt - 1
+
+	sc.calcStats()
+
 	return nil
+}
+
+// calcStats calcuates the stats for a stock scenario
+// after the results have been generated. Includes
+// geometic mean, standard deviation and sharpe ratio.
+func (sc *StockScenario) calcStats() {
+	var chgProduct float64 = 1.0
+
+	// calculate the geometric mean
+	for i, result := range sc.Results {
+		if i > 0 {
+			chgProduct = chgProduct * (1 + result.PctChange)
+		}
+	}
+
+	sc.GeomeanPctChg = math.Pow(chgProduct, 1.0/float64(len(sc.Results)-1)) - 1
+
+	// calculate the variance
+	for i, result := range sc.Results {
+		if i > 0 {
+			sc.Variance += math.Pow((sc.GeomeanPctChg - result.PctChange), float64(2))
+		}
+	}
+	sc.Variance = sc.Variance / float64(len(sc.Results)-1)
+	sc.StdDev = math.Sqrt(sc.Variance)
+
 }
 
 func (sc *StockScenario) String() string {

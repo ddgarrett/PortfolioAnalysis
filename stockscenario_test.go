@@ -137,11 +137,16 @@ func TestCalcResults_Part02(t *testing.T) {
 
 			expectPctChg := expectedResult[j][i]
 			actualPctChg := sc.PctChange * 100
+			actualGeomean := sc.GeomeanPctChg * 100
+			actualStdDev := sc.StdDev * 100
 
 			if math.Abs(actualPctChg-expectPctChg) > .021 {
 				t.Errorf("stock %s, year %s expected %.2f%% change, got %.4f%% change",
 					stock.Ticker, year, expectPctChg, actualPctChg)
 			}
+
+			t.Errorf("%s %s %.5f%% days: %d, stdDev: %.5f%%",
+				stock.Ticker, year, actualGeomean, len(sc.Results)-1, actualStdDev)
 		}
 	}
 
