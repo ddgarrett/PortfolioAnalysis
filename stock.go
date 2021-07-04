@@ -8,6 +8,8 @@ import (
 // NewStock returns pointer to a new Stock structure
 // for a given stock ticker. Assumes data, both daily close
 // and dividend files, are in the "data/" directory.
+// This set of functions assumes the data is from Yahoo history.
+// TODO: convert this to Alpha Advantage data.
 func NewStock(ticker string) (*Stock, error) {
 	result := Stock{Ticker: ticker}
 	err := result.readHistory()
